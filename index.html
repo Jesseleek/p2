@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>340 p2 ex</title>
+    <script src="https://code.jquery.com/jquery-latest.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        //now what?
+        //api:  http://www.ist.rit.edu/api/
+
+        $(document).ready(function() {
+            //get the about data...
+
+            /*
+            $.ajax({
+                type: 'get',
+                //type:arg 
+                url: 'proxy.php',
+                data: {
+                    path: '/degrees/undergraduate/'
+                }, //this one is more powerful
+                //url:'proxy.php?path=/about/',
+                dataType: 'jason',
+                async: true,
+                cache: false
+
+            }).done(function(json) {
+                //lets go through and put out each degree name and description
+                //$.each();
+
+                console.log(json);
+                $.each(json.undergraduate, function(i, item) {
+                    $('#content').append('<h2>' + this.title + '</h2>');
+                    $('#content').append('<h4>' + item.description + '</h4>');
+
+                });
+
+            });
+
+        }); */
+
+            xhr('get', {
+                path: '/degrees/undergraduate/'
+            }, '#content').done(function(json) {
+                $.each(json.undergraduate, function(i, item) {
+                    $('#content').append('<h2>' + this.title + '</h2>');
+                    $('#content').append('<h4>' + item.description + '</h4>');
+
+                });
+            });
+
+            //people
+            xhr('get', {
+                path: '/people/'
+            }, '#people').done(function(json) {
+                //$('#people').html.append('<h1>' + jason.title + '</h1><h2>' + jason.subTitle + '</h4>');
+
+                $.each(json.faculty, function(json) {
+
+                    x += '<div onclick="getData(jason) class="faculty" data-type="faculty" data-uname"' + this.username + '"><h5>' + this.name + '</h5><img style="max-width:150px"; src="' + this.imagePath + '"/></div>';
+
+
+                });
+                $('#people').html.append('<h1>' + jason.title + '</h1><h2>' + jason.subTitle + '</h4>' + x);
+
+                $('people').append(x)
+
+
+
+            });
+        });
+
+        function getData(x) {
+            console.log(x);
+        }
+
+
+
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////
+        //Utilities\
+
+        //ajax utility
+        //   args
+        //   get Post(is for a get or a post?)
+        // d= data({path:'/about/'})
+        // idForSpinner #parent (if I want a spinner to show up while it  is loading)
+        //return 
+        // ajax object
+        // use:
+        // xhr('get',{path:'/degrees/'},'#parent').done(function(json))
+
+        function xhr(getPost, d, idForSpinner) {
+            return $.ajax({ //return!!!
+                type: getPost,
+                cache: false,
+                async: true,
+                dataType: 'json',
+                data: d,
+                url: 'proxy.php',
+                beforeSend: function() {
+                    //create the spinner IF there is a 3rd arg
+                    $(idForSpinner).append('<img src="gears.gif" class="dontuse"/>');
+
+                }
+            }).always(function() {
+                //kill the spinner
+                $(idForSpinner).find('.dontuse').fadeOut(500, function() {
+                    //kill it 
+                    $(this).remove();
+
+                });
+
+            }).fail(function(err) {
+                console.log(err);
+
+            })
+
+        }
+    </script>
+</head>
+
+<body>
+    <h2>IST Dept Site</h2>
+    <div id="content" style="height:200px"></div>
+
+    <div id="people"></div>
+
+</body>
+
+</html>

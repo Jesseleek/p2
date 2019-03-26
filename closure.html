@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <script>
+        function setUp() {
+            var num = 666;
+            //closure - closed over open variable 
+            logNum = function() {
+                    console.log(num)
+                }
+                //in the window, logNum is public, num persist
+
+            increaseNum = function() {
+                num++
+            };
+
+
+
+        }
+
+        setUp();
+        // alertnum
+        logNum();
+        increaseNum;
+        logNum;
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
